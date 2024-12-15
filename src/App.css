@@ -34,3 +34,32 @@
     transform: rotate(360deg);
   }
 }
+
+.btn {
+  margin-top: 1rem;
+  border: none;
+  background-color: rgb(249, 109, 2);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.form-edit {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.form-edit input,
+.form-edit textarea,
+.form-edit select {
+  border: 1px solid black;
+  border-radius: 0.3rem;
+  padding: 0.3rem;
+  font-size: 1rem;
+}
+
+.form-edit label {
+  margin-bottom: 0.2rem;
+}

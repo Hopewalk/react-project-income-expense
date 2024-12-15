@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Table, Space, Tag, Popconfirm, Modal } from "antd";
-import { DeleteOutlined, BugOutlined } from "@ant-design/icons";
+import { DeleteOutlined, BugOutlined, EditOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 
 export default function TransactionList(props) {
@@ -29,6 +29,12 @@ export default function TransactionList(props) {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
+          <Button
+            onClick={props.onItemEdited(record.id)}
+            type="primary"
+            shape="circle"
+            icon={<EditOutlined />}
+          />
           <Popconfirm
             title="Delete the transaction"
             description="Are you sure to delete this transaction?"

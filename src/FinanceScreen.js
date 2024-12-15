@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { Divider, Spin, Typography } from "antd";
 import AddItem from "./components/AddItem";
+import { EditItem } from "./components/Edititem";
 import axios from "axios";
 
 axios.defaults.baseURL =
@@ -76,13 +77,23 @@ function FinanceScreen() {
       setIsLoading(false);
     }
   };
-  const handleNoteChanged = (id, note) => {
-    setTransactionData(
-      transactionData.map((transaction) => {
-        transaction.note = transaction.id === id ? note : transaction.note;
-        return transaction;
-      })
-    );
+
+  const EditItem = async (item) => {
+    try {
+      setIsLoading(true);
+      const params = { ...item };
+      const response = await axios.update(URL_TXACTIONS, { data: params });
+      const { id, attributes } = response.data.data;
+      setTransactionData([
+        ...transactionData,
+        { id: id, key: id, ...attributes },
+      ]);
+      fetchItems();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const deleteItem = async (itemId) => {
@@ -98,11 +109,10 @@ function FinanceScreen() {
   };
   useEffect(() => {
     fetchItems();
+    addItem();
+    EditItem();
   }, []);
 
-  useEffect(() => {
-    addItem();
-  }, []);
   return (
     <div className="App">
       <header className="App-header">
@@ -115,6 +125,7 @@ function FinanceScreen() {
           <TransactionList
             data={transactionData}
             onTransactionDeleted={deleteItem}
+            onItemEdited={EditItem}
           />
         </Spin>
       </header>
