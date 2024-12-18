@@ -1,37 +1,42 @@
 import React from "react";
-
-import "./Edititem.css";
-import { Button } from "antd";
+import { Form, Input, InputNumber, Button, Select } from "antd";
 
 export const EditItem = () => {
+  const [form] = Form.useForm();
   return (
-    <div className="edit-container">
-      <div className="edit">
-        <form>
-          <div className="form-edit">
-            <label htmlFor="date">Date-time</label>
-            <input name="date" />
-          </div>
-          <div className="form-edit">
-            <label htmlFor="type">Type</label>
-            <select name="type">
-              <option value="income">รายรับ</option>
-              <option value="expense">รายจ่าย</option>
-            </select>
-          </div>
-          <div className="form-edit">
-            <label htmlFor="amount">Amount</label>
-            <input name="amount" />
-          </div>
-          <div className="form-edit">
-            <label htmlFor="note">Note</label>
-            <textarea name="note"></textarea>
-          </div>
-          <Button type="submit" className="btn">
-            Submit
-          </Button>
-        </form>
-      </div>
-    </div>
+    <Form form={form} layout="vertical">
+      <Form.Item name="id" label="ID" hidden>
+        <Input disabled />
+      </Form.Item>
+
+      <Form.Item
+        name="type"
+        label="ชนิด"
+        rules={[{ required: true }]}
+        layout="horizontal"
+      >
+        <Select
+          allowClear
+          style={{ width: "100px" }}
+          options={[
+            { value: "income", label: "รายรับ" },
+            { value: "expense", label: "รายจ่าย" },
+          ]}
+        />
+      </Form.Item>
+
+      <Form.Item name="amount" label="จำนวนเงิน" rules={[{ required: true }]}>
+        <InputNumber placeholder="จํานวนเงิน" />
+      </Form.Item>
+
+      <Form.Item name="note" label="หมายเหตุ" rules={[{ required: true }]}>
+        <Input.TextArea rows={1} />
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Add
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };
