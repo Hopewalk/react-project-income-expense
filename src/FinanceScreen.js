@@ -12,10 +12,11 @@ axios.defaults.baseURL =
 const URL_TXACTIONS = "/api/txactions";
 
 function FinanceScreen() {
-  const [selectItem, setEditingItem] = useState(null);
   const [currentAmount, setCurrentAmount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
+  const [selectItem, setEditingItem] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   useEffect(() => {
     setCurrentAmount(
       transactionData.reduce(
@@ -91,8 +92,13 @@ function FinanceScreen() {
     }
   };
 
-  const selectEditItem = (item) => {
+  const handleEditItem = (item) => {
     setEditingItem(item);
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
   };
 
   const deleteItem = async (itemId) => {
@@ -116,7 +122,7 @@ function FinanceScreen() {
       <header className="App-header">
         <Spin spinning={isLoading}>
           <Typography.Title>
-            จำนวนเงินปัจุบัน{currentAmount} บาท
+            จำนวนเงินปัจุบัน {currentAmount} บาท
           </Typography.Title>
           <AddItem onItemAdded={addItem} />
           <Divider>บันทึก รายรับ - รายจ่าย</Divider>
@@ -124,9 +130,15 @@ function FinanceScreen() {
             data={transactionData}
             onTransactionDeleted={deleteItem}
             onNoteChanged={handleNoteChanged}
-            onEditTransaction={selectEditItem}
+            onEditTransaction={handleEditItem}
           />
-          <EditItem defaultItem={selectItem} onEdit={editItem} />
+          {isModalOpen && (
+            <EditItem
+              defaultItem={selectItem}
+              onCancel={handleCancel}
+              onEdit={editItem}
+            />
+          )}
         </Spin>
       </header>
     </div>
