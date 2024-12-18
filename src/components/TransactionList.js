@@ -30,10 +30,10 @@ export default function TransactionList(props) {
       render: (_, record) => (
         <Space size="middle">
           <Button
-            onClick={props.onItemEdited(record.id)}
             type="primary"
             shape="circle"
             icon={<EditOutlined />}
+            onClick={() => props.onEditTransaction(record)}
           />
           <Popconfirm
             title="Delete the transaction"
@@ -65,7 +65,7 @@ export default function TransactionList(props) {
 
   return (
     <>
-      <Table columns={columns} dataSource={props.data} />
+      <Table columns={columns} dataSource={props.data} rowKey="id" />
     </>
   );
 }

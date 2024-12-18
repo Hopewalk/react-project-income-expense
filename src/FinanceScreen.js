@@ -2,9 +2,9 @@ import "./App.css";
 import TransactionList from "./components/TransactionList";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
-import { Divider, Spin, Typography } from "antd";
+import { Button, Divider, Spin, Typography, Form } from "antd";
 import AddItem from "./components/AddItem";
-import { EditItem } from "./components/Edititem";
+import EditItem from "./components/Edititem";
 import axios from "axios";
 
 axios.defaults.baseURL =
@@ -12,27 +12,12 @@ axios.defaults.baseURL =
 const URL_TXACTIONS = "/api/txactions";
 
 function FinanceScreen() {
-  // const [transactionData, setTransactionData] = useState([
-  //   { id: 1, created: "01/02/2021 - 08:30", type: "income", amount: 20000, note: "allowance" },
-  //   { id: 2, created: "01/02/2021 - 10:30", type: "expense", amount: 150, note: "à¸­à¸²à¸«à¸²à¸£à¹€à¸—à¸µà¹ˆà¸¢à¸‡" }
-  // ]);
-  const [amount, setAmount] = useState(0);
+  const [selectItem, setEditingItem] = useState(null);
   const [currentAmount, setCurrentAmount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
   useEffect(() => {
     setCurrentAmount(
-      transactionData.reduce(
-        (sum, transaction) =>
-          transaction.type === "income"
-            ? (sum += transaction.amount)
-            : (sum -= transaction.amount),
-        0
-      )
-    );
-  }, [transactionData]);
-  useEffect(() => {
-    setAmount(
       transactionData.reduce(
         (sum, transaction) =>
           transaction.type === "income"
@@ -61,6 +46,15 @@ function FinanceScreen() {
     }
   };
 
+  const handleNoteChanged = (id, note) => {
+    setTransactionData(
+      transactionData.map((transaction) => {
+        transaction.note = transaction.id === id ? note : transaction.note;
+        return transaction;
+      })
+    );
+  };
+
   const addItem = async (item) => {
     try {
       setIsLoading(true);
@@ -78,22 +72,27 @@ function FinanceScreen() {
     }
   };
 
-  const EditItem = async (item) => {
+  const editItem = async (item) => {
     try {
       setIsLoading(true);
-      const params = { ...item };
-      const response = await axios.update(URL_TXACTIONS, { data: params });
+      const response = await axios.put(`${URL_TXACTIONS}/${item.id}`, {
+        data: item,
+      });
+      fetchItems();
       const { id, attributes } = response.data.data;
       setTransactionData([
         ...transactionData,
         { id: id, key: id, ...attributes },
       ]);
-      fetchItems();
     } catch (err) {
       console.log(err);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const selectEditItem = (item) => {
+    setEditingItem(item);
   };
 
   const deleteItem = async (itemId) => {
@@ -110,7 +109,6 @@ function FinanceScreen() {
   useEffect(() => {
     fetchItems();
     addItem();
-    EditItem();
   }, []);
 
   return (
@@ -125,8 +123,10 @@ function FinanceScreen() {
           <TransactionList
             data={transactionData}
             onTransactionDeleted={deleteItem}
-            onItemEdited={EditItem}
+            onNoteChanged={handleNoteChanged}
+            onEditTransaction={selectEditItem}
           />
+          <EditItem defaultItem={selectItem} onEdit={editItem} />
         </Spin>
       </header>
     </div>

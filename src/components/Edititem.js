@@ -1,8 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Input, InputNumber, Button, Select } from "antd";
 
-export const EditItem = () => {
+const EditItem = ({ defaultItem, onEdit }) => {
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (defaultItem) {
+      form.setFieldsValue({
+        id: defaultItem.id,
+        note: defaultItem.note,
+        amount: defaultItem.amount,
+      });
+    }
+  }, [defaultItem, form]);
+
+  const handleEdit = () => {
+    form.validateFields().then((values) => {
+      const updatedItem = {
+        ...defaultItem,
+        ...values,
+      };
+      onEdit(updatedItem);
+    });
+  };
+
   return (
     <Form form={form} layout="vertical">
       <Form.Item name="id" label="ID" hidden>
@@ -33,10 +54,12 @@ export const EditItem = () => {
         <Input.TextArea rows={1} />
       </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Add
+        <Button type="primary" htmlType="submit" onClick={handleEdit}>
+          Edit
         </Button>
       </Form.Item>
     </Form>
   );
 };
+
+export default EditItem;
