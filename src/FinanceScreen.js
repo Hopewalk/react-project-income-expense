@@ -4,9 +4,10 @@ import TransactionList from "./components/TransactionList";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { Button, Divider, Spin, Typography } from "antd";
-import AddItem from "./components/AddItem";
+import AddItem from "./components/AddForm";
 import EditItem from "./components/Edititem";
 import axios from "axios";
+import Nav from "./components/menubar";
 
 axios.defaults.baseURL =
   process.env.REACT_APP_BASE_URL || "http://localhost:1337";
@@ -120,7 +121,10 @@ function FinanceScreen() {
 
   return (
     <div className="App">
-      <header className="App-header">
+      <header>
+        <Nav />
+      </header>
+      <body className>
         <Spin spinning={isLoading}>
           <Typography.Title>
             จำนวนเงินปัจุบัน {currentAmount} บาท
@@ -141,10 +145,7 @@ function FinanceScreen() {
             />
           )}
         </Spin>
-        <Link to="/">
-          <Button>Log out</Button>
-        </Link>
-      </header>
+      </body>
     </div>
   );
 }
