@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { Button, Divider, Spin, Typography } from "antd";
-import AddItem from "./AddForm";
-import EditItem from "./Edititem";
+import AddItem from "../components/AddForm";
+import EditItem from "../components/Edititem";
 import axios from "axios";
-import Nav from "./menubar";
+import Nav from "../components/menubar";
 
 const URL_TXACTIONS = "/api/txactions";
 

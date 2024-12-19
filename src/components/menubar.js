@@ -6,7 +6,7 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 import { Button, Menu } from "antd";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 const sidebar = [
   {
@@ -27,7 +27,7 @@ const sidebar = [
 ];
 
 const Nav = () => {
-  const [current, setCurrent] = useState("mail");
+  const [current, setCurrent] = useState("");
   const onClick = (e) => {
     console.log("click", e);
     setCurrent(e.key);
@@ -35,8 +35,11 @@ const Nav = () => {
   return (
     <Menu
       onClick={onClick}
+      style={{
+        width: 256,
+      }}
       selectedKeys={[current]}
-      mode="horizontal"
+      mode="inline"
       items={sidebar}
     />
   );
