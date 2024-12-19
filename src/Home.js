@@ -6,9 +6,9 @@ function Home() {
   return (
     <div>
       <h1>Finance Website</h1>
-      <Button type="primary">
-        <Link to="/login">Login</Link>
-      </Button>
+      <Link to="/login">
+        <Button type="primary">Login</Button>
+      </Link>
     </div>
   );
 }

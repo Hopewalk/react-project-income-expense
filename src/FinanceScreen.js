@@ -141,6 +141,9 @@ function FinanceScreen() {
             />
           )}
         </Spin>
+        <Link to="/">
+          <Button>Log out</Button>
+        </Link>
       </header>
     </div>
   );
