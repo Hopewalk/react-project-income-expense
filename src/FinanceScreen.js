@@ -3,7 +3,6 @@ import TransactionList from "./components/TransactionList";
 import { useState, useEffect } from "react";
 import { Divider, Spin, Typography, Layout, theme } from "antd";
 import axios from "axios";
-import Nav from "./components/menubar";
 
 axios.defaults.baseURL =
   process.env.REACT_APP_BASE_URL || "http://localhost:1337";
@@ -49,37 +48,29 @@ function FinanceScreen() {
     fetchItems();
   }, []);
 
-  const { Header, Sider, Content } = Layout;
+  const { Content } = Layout;
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
   return (
-    <Layout>
-      <Sider trigger={null}>
-        <div className="demo-logo-vertical" />
-        <Nav />
-      </Sider>
-      <Layout>
-        <Content
-          style={{
-            margin: "220px 40px",
-            padding: 20,
-            minHeight: 220,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          <Spin spinning={isLoading}>
-            <Typography.Title>
-              จำนวนเงินปัจุบัน {currentAmount} บาท
-            </Typography.Title>
-            <Divider>บันทึก รายรับ - รายจ่าย</Divider>
-            <TransactionList data={transactionData} />
-          </Spin>
-        </Content>
-      </Layout>
-    </Layout>
+    <Content
+      style={{
+        margin: "220px 40px",
+        padding: 20,
+        minHeight: 220,
+        background: colorBgContainer,
+        borderRadius: borderRadiusLG,
+      }}
+    >
+      <Spin spinning={isLoading}>
+        <Typography.Title>
+          จำนวนเงินปัจุบัน {currentAmount} บาท
+        </Typography.Title>
+        <Divider>บันทึก รายรับ - รายจ่าย</Divider>
+        <TransactionList data={transactionData} />
+      </Spin>
+    </Content>
   );
 }
 

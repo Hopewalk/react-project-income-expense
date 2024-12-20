@@ -1,9 +1,18 @@
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
-import { Button, Layout, theme, Tag, Table, Space, Popconfirm } from "antd";
-import { DeleteOutlined, BugOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Layout,
+  theme,
+  Tag,
+  Table,
+  Space,
+  Popconfirm,
+  Typography,
+  Spin,
+} from "antd";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import axios from "axios";
-import Nav from "../components/menubar";
 import EditItem from "../components/Edititem";
 const URL_TXACTIONS = "/api/txactions";
 
@@ -131,42 +140,37 @@ function Edititempage() {
     fetchItems();
   }, []);
 
-  const { Header, Sider, Content } = Layout;
+  const { Content } = Layout;
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
   return (
-    <Layout>
-      <Sider trigger={null}>
-        <div className="demo-logo-vertical" />
-        <Nav />
-      </Sider>
-      <Layout>
-        <Content
-          style={{
-            margin: "220px 40px",
-            padding: 20,
-            minHeight: 220,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          <TransactionList
-            data={transactionData}
-            onEditTransaction={handleEditItem}
-            onTransactionDeleted={deleteItem}
+    <Content
+      style={{
+        margin: "220px 40px",
+        padding: 20,
+        minHeight: 220,
+        background: colorBgContainer,
+        borderRadius: borderRadiusLG,
+      }}
+    >
+      <Spin spinning={isLoading}>
+        <Typography.Title>Edit Trasactions</Typography.Title>
+        <TransactionList
+          data={transactionData}
+          onEditTransaction={handleEditItem}
+          onTransactionDeleted={deleteItem}
+        />
+        {isModalOpen && (
+          <EditItem
+            defaultItem={selectItem}
+            onCancel={handleCancel}
+            onEdit={editItem}
           />
-          {isModalOpen && (
-            <EditItem
-              defaultItem={selectItem}
-              onCancel={handleCancel}
-              onEdit={editItem}
-            />
-          )}
-        </Content>
-      </Layout>
-    </Layout>
+        )}
+      </Spin>
+    </Content>
   );
 }
 

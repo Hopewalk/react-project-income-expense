@@ -6,8 +6,8 @@ import {
   LogoutOutlined,
   LineHeightOutlined,
 } from "@ant-design/icons";
-import { Button, Menu, theme } from "antd";
-import { Link, Navigate } from "react-router-dom";
+import { Menu } from "antd";
+import { Link } from "react-router-dom";
 
 const sidebar = [
   {
@@ -32,12 +32,16 @@ const sidebar = [
   },
 ];
 
-const Nav = () => {
+const Nav = ({ onLogout }) => {
   const [current, setCurrent] = useState("");
   const onClick = (e) => {
-    console.log("click", e);
-    setCurrent(e.key);
+    if (e.key === "logout") {
+      onLogout();
+    } else {
+      setCurrent(e.key);
+    }
   };
+
   return (
     <Menu
       onClick={onClick}

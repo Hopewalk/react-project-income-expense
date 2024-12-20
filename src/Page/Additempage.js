@@ -1,10 +1,8 @@
-import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
-import { Layout, theme, Tag, Table } from "antd";
+import { Tag, Table, Spin, Typography, Divider, Layout, theme } from "antd";
 import AddItem from "../components/AddForm";
 import axios from "axios";
-import Nav from "../components/menubar";
 
 const URL_TXACTIONS = "/api/txactions";
 
@@ -40,6 +38,19 @@ function TransactionList(props) {
 function Additempage() {
   const [transactionData, setTransactionData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentAmount, setCurrentAmount] = useState(0);
+
+  useEffect(() => {
+    setCurrentAmount(
+      transactionData.reduce(
+        (sum, transaction) =>
+          transaction.type === "income"
+            ? (sum += transaction.amount)
+            : (sum -= transaction.amount),
+        0
+      )
+    );
+  }, [transactionData]);
 
   const fetchItems = async () => {
     try {
@@ -80,33 +91,29 @@ function Additempage() {
     fetchItems();
     addItem();
   }, []);
-
-  const { Header, Sider, Content } = Layout;
+  const { Content } = Layout;
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
   return (
-    <Layout>
-      <Sider trigger={null}>
-        <div className="demo-logo-vertical" />
-        <Nav />
-      </Sider>
-      <Layout>
-        <Content
-          style={{
-            margin: "220px 40px",
-            padding: 20,
-            minHeight: 220,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
+    <Content
+      style={{
+        margin: "220px 40px",
+        padding: 20,
+        minHeight: 220,
+        background: colorBgContainer,
+        borderRadius: borderRadiusLG,
+      }}
+    >
+      <Spin spinning={isLoading}>
+        <Typography.Title>
           <AddItem onItemAdded={addItem} />
-          <TransactionList data={transactionData} />
-        </Content>
-      </Layout>
-    </Layout>
+        </Typography.Title>
+        <Divider>จำนวนเงินปัจุบัน {currentAmount}</Divider>
+        <TransactionList data={transactionData} />
+      </Spin>
+    </Content>
   );
 }
 
