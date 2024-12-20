@@ -24,43 +24,6 @@ export default function TransactionList(props) {
     },
     { title: "Amount", dataIndex: "amount", key: "amount" },
     { title: "Note", dataIndex: "note", key: "note" },
-    {
-      title: "Action",
-      key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          <Button
-            type="primary"
-            shape="circle"
-            icon={<EditOutlined />}
-            onClick={() => props.onEditTransaction(record)}
-          />
-          <Popconfirm
-            title="Delete the transaction"
-            description="Are you sure to delete this transaction?"
-            onConfirm={() => props.onTransactionDeleted(record.id)}
-          >
-            <Button
-              danger
-              type="primary"
-              shape="circle"
-              icon={<DeleteOutlined />}
-            />
-          </Popconfirm>
-          <Button
-            type="primary"
-            shape="circle"
-            icon={<BugOutlined />}
-            onClick={() => {
-              Modal.info({
-                title: "Debug",
-                content: JSON.stringify(record),
-              });
-            }}
-          />
-        </Space>
-      ),
-    },
   ];
 
   return (

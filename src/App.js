@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./Page/Home";
 import Additempage from "./Page/Additempage";
 import Nav from "./components/menubar";
+import Edititempage from "./Page/Edititempage";
 
 axios.defaults.baseURL =
   process.env.REACT_APP_BASE_URL || "http://localhost:1337";
@@ -44,6 +45,7 @@ function App() {
           element={isAuthenticated ? <FinanceScreen /> : <Navigate to="/" />}
         />
         <Route path="/addtransaction" element={<Additempage />} />
+        <Route path="/edittransaction" element={<Edititempage />} />
       </Routes>
     </BrowserRouter>
   );

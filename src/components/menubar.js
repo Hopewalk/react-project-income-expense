@@ -21,6 +21,11 @@ const sidebar = [
     label: <Link to="/addtransaction">Add Transaction</Link>,
   },
   {
+    key: "edititem",
+    icon: <EditOutlined />,
+    label: <Link to="/edittransaction">Edit Transaction</Link>,
+  },
+  {
     key: "logout",
     icon: <LogoutOutlined />,
     label: <Link to="/">Logout</Link>,

@@ -1,11 +1,7 @@
 import "./App.css";
-import { Link } from "react-router-dom";
 import TransactionList from "./components/TransactionList";
 import { useState, useEffect } from "react";
-import dayjs from "dayjs";
-import { Button, Divider, Spin, Typography, Layout, theme } from "antd";
-import AddItem from "./components/AddForm";
-import EditItem from "./components/Edititem";
+import { Divider, Spin, Typography, Layout, theme } from "antd";
 import axios from "axios";
 import Nav from "./components/menubar";
 
@@ -49,74 +45,8 @@ function FinanceScreen() {
     }
   };
 
-  const handleNoteChanged = (id, note) => {
-    setTransactionData(
-      transactionData.map((transaction) => {
-        transaction.note = transaction.id === id ? note : transaction.note;
-        return transaction;
-      })
-    );
-  };
-
-  const addItem = async (item) => {
-    try {
-      setIsLoading(true);
-      const params = { ...item, action_datetime: dayjs() };
-      const response = await axios.post(URL_TXACTIONS, { data: params });
-      const { id, attributes } = response.data.data;
-      setTransactionData([
-        ...transactionData,
-        { id: id, key: id, ...attributes },
-      ]);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const editItem = async (item) => {
-    try {
-      setIsLoading(true);
-      const response = await axios.put(`${URL_TXACTIONS}/${item.id}`, {
-        data: item,
-      });
-      fetchItems();
-      const { id, attributes } = response.data.data;
-      setTransactionData([
-        ...transactionData,
-        { id: id, key: id, ...attributes },
-      ]);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleEditItem = (item) => {
-    setEditingItem(item);
-    setIsModalOpen(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const deleteItem = async (itemId) => {
-    try {
-      setIsLoading(true);
-      await axios.delete(`${URL_TXACTIONS}/${itemId}`);
-      fetchItems();
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   useEffect(() => {
     fetchItems();
-    addItem();
   }, []);
 
   const { Header, Sider, Content } = Layout;
@@ -133,9 +63,9 @@ function FinanceScreen() {
       <Layout>
         <Content
           style={{
-            margin: "126px 40px",
+            margin: "220px 40px",
             padding: 20,
-            minHeight: 200,
+            minHeight: 220,
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
           }}
@@ -144,21 +74,8 @@ function FinanceScreen() {
             <Typography.Title>
               จำนวนเงินปัจุบัน {currentAmount} บาท
             </Typography.Title>
-            <AddItem onItemAdded={addItem} />
             <Divider>บันทึก รายรับ - รายจ่าย</Divider>
-            <TransactionList
-              data={transactionData}
-              onTransactionDeleted={deleteItem}
-              onNoteChanged={handleNoteChanged}
-              onEditTransaction={handleEditItem}
-            />
-            {isModalOpen && (
-              <EditItem
-                defaultItem={selectItem}
-                onCancel={handleCancel}
-                onEdit={editItem}
-              />
-            )}
+            <TransactionList data={transactionData} />
           </Spin>
         </Content>
       </Layout>

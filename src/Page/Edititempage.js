@@ -1,11 +1,10 @@
-import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
-import { Layout, theme, Tag, Table } from "antd";
-import AddItem from "../components/AddForm";
+import { Button, Layout, theme, Tag, Table, Space, Popconfirm } from "antd";
+import { DeleteOutlined, BugOutlined, EditOutlined } from "@ant-design/icons";
 import axios from "axios";
 import Nav from "../components/menubar";
-
+import EditItem from "../components/Edititem";
 const URL_TXACTIONS = "/api/txactions";
 
 function TransactionList(props) {
@@ -29,7 +28,34 @@ function TransactionList(props) {
     },
     { title: "Amount", dataIndex: "amount", key: "amount" },
     { title: "Note", dataIndex: "note", key: "note" },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Space size="middle">
+          <Button
+            type="primary"
+            shape="circle"
+            icon={<EditOutlined />}
+            onClick={() => props.onEditTransaction(record)}
+          />
+          <Popconfirm
+            title="Delete the transaction"
+            description="Are you sure to delete this transaction?"
+            onConfirm={() => props.onTransactionDeleted(record.id)}
+          >
+            <Button
+              danger
+              type="primary"
+              shape="circle"
+              icon={<DeleteOutlined />}
+            />
+          </Popconfirm>
+        </Space>
+      ),
+    },
   ];
+
   return (
     <>
       <Table columns={columns} dataSource={props.data} rowKey="id" />
@@ -37,8 +63,10 @@ function TransactionList(props) {
   );
 }
 
-function Additempage() {
+function Edititempage() {
   const [transactionData, setTransactionData] = useState([]);
+  const [selectItem, setEditingItem] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchItems = async () => {
@@ -59,11 +87,13 @@ function Additempage() {
     }
   };
 
-  const addItem = async (item) => {
+  const editItem = async (item) => {
     try {
       setIsLoading(true);
-      const params = { ...item, action_datetime: dayjs() };
-      const response = await axios.post(URL_TXACTIONS, { data: params });
+      const response = await axios.put(`${URL_TXACTIONS}/${item.id}`, {
+        data: item,
+      });
+      fetchItems();
       const { id, attributes } = response.data.data;
       setTransactionData([
         ...transactionData,
@@ -76,9 +106,29 @@ function Additempage() {
     }
   };
 
+  const handleEditItem = (item) => {
+    setEditingItem(item);
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const deleteItem = async (itemId) => {
+    try {
+      setIsLoading(true);
+      await axios.delete(`${URL_TXACTIONS}/${itemId}`);
+      fetchItems();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchItems();
-    addItem();
   }, []);
 
   const { Header, Sider, Content } = Layout;
@@ -102,12 +152,22 @@ function Additempage() {
             borderRadius: borderRadiusLG,
           }}
         >
-          <AddItem onItemAdded={addItem} />
-          <TransactionList data={transactionData} />
+          <TransactionList
+            data={transactionData}
+            onEditTransaction={handleEditItem}
+            onTransactionDeleted={deleteItem}
+          />
+          {isModalOpen && (
+            <EditItem
+              defaultItem={selectItem}
+              onCancel={handleCancel}
+              onEdit={editItem}
+            />
+          )}
         </Content>
       </Layout>
     </Layout>
   );
 }
 
-export default Additempage;
+export default Edititempage;
