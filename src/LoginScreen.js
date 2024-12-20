@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button, Form, Input, Alert } from "antd";
 import axios from "axios";
+import "./App.css";
 
 const URL_AUTH = "/api/auth/local";
 
@@ -24,27 +25,35 @@ export default function LoginScreen(props) {
     }
   };
   return (
-    <Form onFinish={handleLogin} autoComplete="off">
-      {errMsg && (
-        <Form.Item>
-          <Alert message={errMsg} type="error" />
-        </Form.Item>
-      )}
-      <Form.Item
-        label="Username"
-        name="identifier"
-        rules={[{ required: true }]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item label="Password" name="password" rules={[{ required: true }]}>
-        <Input.Password />
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit" loading={isLoading}>
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+    <div className="App-header">
+      <div className="App">
+        <Form onFinish={handleLogin} autoComplete="off">
+          {errMsg && (
+            <Form.Item>
+              <Alert message={errMsg} type="error" />
+            </Form.Item>
+          )}
+          <Form.Item
+            label="Username"
+            name="identifier"
+            rules={[{ required: true }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[{ required: true }]}
+          >
+            <Input.Password />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" loading={isLoading}>
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </div>
   );
 }

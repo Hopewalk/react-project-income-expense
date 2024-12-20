@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import TransactionList from "./components/TransactionList";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
-import { Button, Divider, Spin, Typography } from "antd";
+import { Button, Divider, Spin, Typography, Layout, theme } from "antd";
 import AddItem from "./components/AddForm";
 import EditItem from "./components/Edititem";
 import axios from "axios";
@@ -119,34 +119,50 @@ function FinanceScreen() {
     addItem();
   }, []);
 
+  const { Header, Sider, Content } = Layout;
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
+
   return (
-    <div className="App">
-      <header>
+    <Layout>
+      <Sider trigger={null}>
+        <div className="demo-logo-vertical" />
         <Nav />
-      </header>
-      <body className>
-        <Spin spinning={isLoading}>
-          <Typography.Title>
-            จำนวนเงินปัจุบัน {currentAmount} บาท
-          </Typography.Title>
-          <AddItem onItemAdded={addItem} />
-          <Divider>บันทึก รายรับ - รายจ่าย</Divider>
-          <TransactionList
-            data={transactionData}
-            onTransactionDeleted={deleteItem}
-            onNoteChanged={handleNoteChanged}
-            onEditTransaction={handleEditItem}
-          />
-          {isModalOpen && (
-            <EditItem
-              defaultItem={selectItem}
-              onCancel={handleCancel}
-              onEdit={editItem}
+      </Sider>
+      <Layout>
+        <Content
+          style={{
+            margin: "126px 40px",
+            padding: 20,
+            minHeight: 200,
+            background: colorBgContainer,
+            borderRadius: borderRadiusLG,
+          }}
+        >
+          <Spin spinning={isLoading}>
+            <Typography.Title>
+              จำนวนเงินปัจุบัน {currentAmount} บาท
+            </Typography.Title>
+            <AddItem onItemAdded={addItem} />
+            <Divider>บันทึก รายรับ - รายจ่าย</Divider>
+            <TransactionList
+              data={transactionData}
+              onTransactionDeleted={deleteItem}
+              onNoteChanged={handleNoteChanged}
+              onEditTransaction={handleEditItem}
             />
-          )}
-        </Spin>
-      </body>
-    </div>
+            {isModalOpen && (
+              <EditItem
+                defaultItem={selectItem}
+                onCancel={handleCancel}
+                onEdit={editItem}
+              />
+            )}
+          </Spin>
+        </Content>
+      </Layout>
+    </Layout>
   );
 }
 

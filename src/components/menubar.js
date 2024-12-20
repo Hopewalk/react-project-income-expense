@@ -4,8 +4,9 @@ import {
   PlusCircleOutlined,
   EyeOutlined,
   LogoutOutlined,
+  LineHeightOutlined,
 } from "@ant-design/icons";
-import { Button, Menu } from "antd";
+import { Button, Menu, theme } from "antd";
 import { Link, Navigate } from "react-router-dom";
 
 const sidebar = [
@@ -35,10 +36,8 @@ const Nav = () => {
   return (
     <Menu
       onClick={onClick}
-      style={{
-        width: 256,
-      }}
       selectedKeys={[current]}
+      theme="dark"
       mode="inline"
       items={sidebar}
     />

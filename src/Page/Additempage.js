@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
-import { Button, Divider, Spin, Typography } from "antd";
+import { Layout, theme } from "antd";
 import AddItem from "../components/AddForm";
-import EditItem from "../components/Edititem";
 import axios from "axios";
 import Nav from "../components/menubar";
 
@@ -62,15 +61,31 @@ function Additempage() {
     addItem();
   }, []);
 
+  const { Header, Sider, Content } = Layout;
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
+
   return (
-    <div className="App">
-      <header>
+    <Layout>
+      <Sider trigger={null}>
+        <div className="demo-logo-vertical" />
         <Nav />
-      </header>
-      <body>
-        <AddItem onItemAdded={addItem} />
-      </body>
-    </div>
+      </Sider>
+      <Layout>
+        <Content
+          style={{
+            margin: "400px 40px",
+            padding: 20,
+            minHeight: 200,
+            background: colorBgContainer,
+            borderRadius: borderRadiusLG,
+          }}
+        >
+          <AddItem onItemAdded={addItem} />
+        </Content>
+      </Layout>
+    </Layout>
   );
 }
 

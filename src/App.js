@@ -26,32 +26,26 @@ function App() {
     //     {isAuthenticated && <FinanceScreen />}
     //   </header>
     //  </div>
-    <div className="App">
-      <header className="App-header">
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/login"
-              element={
-                !isAuthenticated ? (
-                  <LoginScreen onLoginSuccess={handleLoginSuccess} />
-                ) : (
-                  <Navigate to="/finance" />
-                )
-              }
-            />
-            <Route
-              path="/finance"
-              element={
-                isAuthenticated ? <FinanceScreen /> : <Navigate to="/" />
-              }
-            />
-            <Route path="/addtransaction" element={<Additempage />} />
-          </Routes>
-        </BrowserRouter>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/login"
+          element={
+            !isAuthenticated ? (
+              <LoginScreen onLoginSuccess={handleLoginSuccess} />
+            ) : (
+              <Navigate to="/finance" />
+            )
+          }
+        />
+        <Route
+          path="/finance"
+          element={isAuthenticated ? <FinanceScreen /> : <Navigate to="/" />}
+        />
+        <Route path="/addtransaction" element={<Additempage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
