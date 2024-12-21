@@ -32,11 +32,15 @@ const sidebar = [
   },
 ];
 
+function logout() {
+  localStorage.clear();
+  window.location.href = "/";
+}
 const Nav = ({ onLogout }) => {
   const [current, setCurrent] = useState("");
   const onClick = (e) => {
     if (e.key === "logout") {
-      onLogout();
+      logout();
     } else {
       setCurrent(e.key);
     }
