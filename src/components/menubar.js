@@ -36,7 +36,7 @@ function logout() {
   localStorage.clear();
   window.location.href = "/";
 }
-const Nav = ({ onLogout }) => {
+const Nav = () => {
   const [current, setCurrent] = useState("");
   const onClick = (e) => {
     if (e.key === "logout") {

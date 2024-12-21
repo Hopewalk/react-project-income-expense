@@ -44,13 +44,7 @@ function App() {
       </Routes>
       <Layout>
         <Sider>
-          <div>
-            {isAuthenticated ? (
-              <Nav onLogout={handleLogout} />
-            ) : (
-              <Navigate to="/login" />
-            )}
-          </div>
+          <div>{isAuthenticated ? <Nav /> : <Navigate to="/login" />}</div>
         </Sider>
         <Routes>
           <Route
