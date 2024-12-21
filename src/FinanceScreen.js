@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { Divider, Spin, Typography, Layout, theme } from "antd";
 import axios from "axios";
 
+import axios from "axios";
+
 axios.defaults.baseURL =
   process.env.REACT_APP_BASE_URL || "http://localhost:1337";
 const URL_TXACTIONS = "/api/txactions";
